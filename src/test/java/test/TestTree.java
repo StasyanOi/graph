@@ -48,13 +48,15 @@ public class TestTree {
         tree.dfsApply(System.out::println);
     }
 
-    //"Not full"
     @Test
     public void delete() {
         Tree tree = getTree();
         assertTrue(tree.has(-4));
+        String beforeDelete = tree.toString();
         tree.delete(-4);
         assertFalse(tree.has(-4));
+        String afterDelete = tree.toString();
+        assertEquals(beforeDelete.replace("-4.0,", ""), afterDelete);
     }
 
     @Test
