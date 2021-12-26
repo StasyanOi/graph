@@ -16,12 +16,36 @@ public class TestTree {
     }
 
     @Test
+    public void bfs() {
+        Tree tree = getTree();
+        double findData = 4;
+        Tree.Node node = tree.bfs(findData);
+        assertTrue(tree.contains(node));
+        assertEquals(findData, node.getData());
+    }
+
+    @Test
+    public void dfsStack() {
+        Tree tree = getTree();
+        double findData = 4;
+        Tree.Node node = tree.dfsStack(findData);
+        assertTrue(tree.contains(node));
+        assertEquals(findData, node.getData());
+    }
+
+    @Test
     public void has() {
         Tree tree = getTree();
         assertTrue(tree.has(-2d));
         assertFalse(tree.has(-200d));
         assertFalse(tree.has(-324d));
         assertFalse(tree.has(-0.123d));
+    }
+
+    @Test
+    public void nodeConsume() {
+        Tree tree = getTree();
+        tree.dfsApply(System.out::println);
     }
 
     //"Not full"

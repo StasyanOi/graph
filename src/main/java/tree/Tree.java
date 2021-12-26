@@ -1,6 +1,9 @@
 package tree;
 
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Stack;
+import java.util.function.Consumer;
 
 public class Tree {
 
@@ -183,15 +186,88 @@ public class Tree {
         return dfs != null;
     }
 
-    private static class Node {
+    public Node bfs(double findData) {
+        Queue<Node> queue = new LinkedList<>();
+        queue.add(start);
+        while (queue.size() != 0) {
+            Node poll = queue.poll();
+            if (findData == poll.data) {
+                return poll;
+            }
+            if (poll.right != null) {
+                queue.add(poll.right);
+            }
+            if (poll.left != null) {
+                queue.add(poll.left);
+            }
+        }
+        return null;
+    }
+
+    public boolean contains(Node node) {
+        return start.contains(node) != null;
+    }
+
+    public Node dfsStack(double findData) {
+        Stack<Node> stack = new Stack<>();
+        stack.push(start);
+        while (stack.size() != 0) {
+            Node pop = stack.pop();
+            if (findData == pop.data) {
+                return pop;
+            }
+            if (pop.right != null) {
+                stack.add(pop.right);
+            }
+            if (pop.left != null) {
+                stack.add(pop.left);
+            }
+        }
+        return null;
+    }
+
+    public void dfsApply(Consumer<Node> nodeConsumer) {
+        Stack<Node> stack = new Stack<>();
+        stack.add(start);
+        while (stack.size() != 0) {
+            Node pop = stack.peek();
+            if (pop.left != null && !pop.left.visited) {
+                stack.add(pop.left);
+                continue;
+            }
+            if (!pop.visited) {
+                nodeConsumer.accept(pop);
+                pop.visited = true;
+            }
+            if (pop.right != null && !pop.right.visited) {
+                stack.add(pop.right);
+                continue;
+            }
+            stack.pop();
+        }
+    }
+
+    public static class Node {
         public int level = 1;
         private Node prev;
         private Node left;
         private Node right;
         private double data;
+        private boolean visited;
 
         public Node(double data) {
             this.data = data;
+        }
+
+        @Override
+        public String toString() {
+            return "Node{" +
+                    "data=" + data +
+                    '}';
+        }
+
+        public double getData() {
+            return data;
         }
 
         public Node dfs(double searchData) {
@@ -206,6 +282,25 @@ public class Tree {
             }
             if (right != null) {
                 Node dfs = right.dfs(searchData);
+                if (dfs != null) {
+                    return dfs;
+                }
+            }
+            return null;
+        }
+
+        public Node contains(Node searchData) {
+            if (left != null) {
+                Node dfs = left.contains(searchData);
+                if (dfs != null) {
+                    return dfs;
+                }
+            }
+            if (this == searchData) {
+                return this;
+            }
+            if (right != null) {
+                Node dfs = right.contains(searchData);
                 if (dfs != null) {
                     return dfs;
                 }
