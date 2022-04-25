@@ -1,12 +1,10 @@
-package tree;
+package com;
+
+import com.graph.Graph;
 
 public class Main {
 
     public static void main(String[] args) {
-        graph();
-    }
-
-    private static void graph() {
         int numberOfNodes = 5;
         boolean[][] matrix = new boolean[numberOfNodes][numberOfNodes];
         matrix[0][1] = true;
@@ -16,12 +14,12 @@ public class Main {
         printGraphMatrix(matrix);
         Graph graph = new Graph(matrix);
         System.out.println("DFS");
-        System.out.println(graph.dfsRecursive(0));
-        System.out.println(graph.dfsRecursive(1));
-        System.out.println(graph.dfsRecursive(2));
-        System.out.println(graph.dfsRecursive(3));
-        System.out.println(graph.dfsRecursive(4));
-        System.out.println(graph.dfsRecursive(5));
+        System.out.println(graph.dfs(0));
+        System.out.println(graph.dfs(1));
+        System.out.println(graph.dfs(2));
+        System.out.println(graph.dfs(3));
+        System.out.println(graph.dfs(4));
+        System.out.println(graph.dfs(5));
         System.out.println("BFS");
         System.out.println(graph.bfs(0));
         System.out.println(graph.bfs(1));
@@ -40,7 +38,7 @@ public class Main {
                     System.out.print(0);
                 }
             }
-            System.out.println();
+            System.out.print("\n");
         }
     }
 }
