@@ -9,94 +9,85 @@ public class TestTree {
 
     @Test
     public void insertTest() {
-        Tree tree = getTestTree();
-        assertFalse(tree.has(100d));
+        var tree = getTestTree();
+        assertNull(tree.dfs(100d));
         tree.insert(100d);
-        assertTrue(tree.has(100d));
+        assertNotNull(tree.dfs(100d));
     }
 
     @Test
     public void bfsTest() {
-        Tree tree = getTestTree();
+        var tree = getTestTree();
         double findData = 4;
-        Tree.Node node = tree.bfs(findData);
-        assertTrue(tree.contains(node));
+        var node = tree.bfs(findData);
+        assertNotNull(node);
         assertEquals(findData, node.getData());
     }
 
     @Test
-    public void dfsStackTest() {
-        Tree tree = getTestTree();
+    public void dfsTest() {
+        var tree = getTestTree();
         double findData = 4;
-        Tree.Node node = tree.dfsStack(findData);
-        assertTrue(tree.contains(node));
+        var node = tree.dfs(findData);
+        assertNotNull(node);
         assertEquals(findData, node.getData());
-    }
-
-    @Test
-    public void hasTest() {
-        Tree tree = getTestTree();
-        assertTrue(tree.has(-2d));
-        assertFalse(tree.has(-200d));
-        assertFalse(tree.has(-324d));
-        assertFalse(tree.has(-0.123d));
     }
 
     @Test
     public void nodeConsumeTest() {
-        Tree tree = getTestTree();
+        var tree = getTestTree();
         tree.dfsApply(System.out::println);
     }
 
     @Test
     public void deleteTest() {
-        Tree tree = getTestTree();
-        assertTrue(tree.has(-4));
-        String beforeDelete = tree.toString();
+        var tree = getTestTree();
+
+        assertNotNull(tree.dfs(-4));
+        var beforeDeleteString = tree.toString();
+
         tree.delete(-4);
-        assertFalse(tree.has(-4));
-        String afterDelete = tree.toString();
-        assertEquals(beforeDelete.replace("-4.0,", ""), afterDelete);
+
+        assertNull(tree.dfs(-4));
+        var afterDeleteString = tree.toString();
+
+        assertEquals(beforeDeleteString.replace("-4.0,", ""), afterDeleteString);
     }
 
     @Test
     public void rotateRightTest() {
-        Tree tree = new Tree();
+        var tree = new Tree();
         tree.insert(0);
         tree.insert(-2);
         tree.insert(-1);
         tree.insert(-4);
-        String beforeRotation = tree.toString();
-        tree.rotateRight(tree.find(-2));
-        String afterRotation = tree.toString();
-        assertEquals(beforeRotation, afterRotation);
+
+        var beforeRotationString = tree.toString();
+        tree.rotateRight(tree.dfs(-2));
+        var afterRotationString = tree.toString();
+
+        assertEquals(beforeRotationString, afterRotationString);
     }
 
     @Test
     public void rotateLeftTest() {
-        Tree tree = new Tree();
+        var tree = new Tree();
         tree.insert(0);
         tree.insert(2);
         tree.insert(1);
         tree.insert(4);
-        String beforeRotation = tree.toString();
-        tree.rotateLeft(tree.find(2));
-        String afterRotation = tree.toString();
-        assertEquals(beforeRotation, afterRotation);
+        var beforeRotationString = tree.toString();
+        tree.rotateLeft(tree.dfs(2));
+        var afterRotationString = tree.toString();
+        assertEquals(beforeRotationString, afterRotationString);
     }
 
     @Test
-    public void dfsTest() {
-        Tree tree = getTestTree();
-        String stringRepresentation = tree.toString();
-        String expectedString = "[-8.0,-6.0,-5.0,-4.0,-3.5,-3.4,-3.0,-2.0,-1.0,0.0,1.0,2.0,3.0,4.0,5.0,6.0,8.0,]";
-        assertEquals(expectedString,stringRepresentation);
-    }
-
-    @Test
-    public void findTest() {
-        Tree tree = getTestTree();
-        tree.find(2);
+    public void stringRepresentationTest() {
+        var tree = getTestTree();
+        var stringRepresentation = tree.toString();
+        var expectedString = "[-8.0,-6.0,-5.0,-4.0,-3.5,-3.4,-3.0,-2.0,-1.0,0.0,1.0,2.0,3.0,4.0,5.0,6.0,8.0,]";
+        assertEquals(expectedString, stringRepresentation);
     }
 
     private Tree getTestTree() {

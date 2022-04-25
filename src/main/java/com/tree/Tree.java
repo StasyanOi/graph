@@ -81,7 +81,7 @@ public class Tree {
     }
 
     public void delete(double data) {
-        Node nodeToDelete = find(data);
+        Node nodeToDelete = dfs(data);
         if (nodeToDelete.right != null) {
             Node leftMostNode = leftMostNode(nodeToDelete.right);
             double temp = leftMostNode.data;
@@ -140,13 +140,6 @@ public class Tree {
         return current;
     }
 
-    public Node find(double searchData) {
-        if (start == null) {
-            return null;
-        }
-        return start.dfs(searchData);
-    }
-
     public String toString() {
         return "[" + toString0() + "]";
     }
@@ -180,12 +173,6 @@ public class Tree {
         midNode.prev = prev.prev;
     }
 
-
-    public boolean has(double element) {
-        Node dfs = find(element);
-        return dfs != null;
-    }
-
     public Node bfs(double findData) {
         Queue<Node> queue = new LinkedList<>();
         queue.add(start);
@@ -204,11 +191,7 @@ public class Tree {
         return null;
     }
 
-    public boolean contains(Node node) {
-        return start.contains(node) != null;
-    }
-
-    public Node dfsStack(double findData) {
+    public Node dfs(double findData) {
         Stack<Node> stack = new Stack<>();
         stack.push(start);
         while (stack.size() != 0) {
@@ -268,44 +251,6 @@ public class Tree {
 
         public double getData() {
             return data;
-        }
-
-        public Node dfs(double searchData) {
-            if (left != null) {
-                Node dfs = left.dfs(searchData);
-                if (dfs != null) {
-                    return dfs;
-                }
-            }
-            if (data == searchData) {
-                return this;
-            }
-            if (right != null) {
-                Node dfs = right.dfs(searchData);
-                if (dfs != null) {
-                    return dfs;
-                }
-            }
-            return null;
-        }
-
-        public Node contains(Node searchData) {
-            if (left != null) {
-                Node dfs = left.contains(searchData);
-                if (dfs != null) {
-                    return dfs;
-                }
-            }
-            if (this == searchData) {
-                return this;
-            }
-            if (right != null) {
-                Node dfs = right.contains(searchData);
-                if (dfs != null) {
-                    return dfs;
-                }
-            }
-            return null;
         }
 
         public void string(StringBuilder stringBuilder) {
