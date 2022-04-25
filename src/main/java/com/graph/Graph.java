@@ -38,7 +38,7 @@ public class Graph {
             var currentNode = nodeQueue.poll();
             if (searchData == currentNode.data) {
                 nodeQueue.clear();
-                setAllNotVisited();
+                nodes.forEach(node -> node.visited = false);
                 return true;
             }
             for (int i = 0; i < currentNode.nextNodes.size(); i++) {
@@ -48,7 +48,7 @@ public class Graph {
                 }
             }
         }
-        setAllNotVisited();
+        nodes.forEach(node -> node.visited = false);
         return false;
     }
 
@@ -61,7 +61,7 @@ public class Graph {
             currentNode.visited = true;
             if (currentNode.data == searchData) {
                 stack.clear();
-                setAllNotVisited();
+                nodes.forEach(node -> node.visited = false);
                 return true;
             }
             var nextNodes = currentNode.nextNodes;
@@ -70,7 +70,7 @@ public class Graph {
             } else {
                 for (var nextNode : nextNodes) {
                     if (!nextNode.visited) {
-                        stack.add(nextNode);
+                        stack.push(nextNode);
                         break;
                     }
                 }
@@ -86,10 +86,6 @@ public class Graph {
             }
         }
         return true;
-    }
-
-    private void setAllNotVisited() {
-        nodes.forEach(node -> node.visited = false);
     }
 
     private static class Node {

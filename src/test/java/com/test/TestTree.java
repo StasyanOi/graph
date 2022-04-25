@@ -34,12 +34,6 @@ public class TestTree {
     }
 
     @Test
-    public void nodeConsumeTest() {
-        var tree = getTestTree();
-        tree.dfsApply(System.out::println);
-    }
-
-    @Test
     public void deleteTest() {
         var tree = getTestTree();
 

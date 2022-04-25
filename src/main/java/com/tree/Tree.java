@@ -3,7 +3,6 @@ package com.tree;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Stack;
-import java.util.function.Consumer;
 
 public class Tree {
 
@@ -149,7 +148,27 @@ public class Tree {
         if (start == null) {
             return "";
         }
-        start.string(stringBuilder);
+        Stack<Node> stack = new Stack<>();
+        stack.push(start);
+        var visitedNodes = new LinkedList<Node>();
+        while (stack.size() != 0) {
+            Node pop = stack.peek();
+            if (pop.left != null && !pop.left.visited) {
+                stack.add(pop.left);
+                continue;
+            }
+            if (!pop.visited) {
+                pop.visited = true;
+                visitedNodes.add(pop);
+                stringBuilder.append(pop.data).append(",");
+            }
+            if (pop.right != null && !pop.right.visited) {
+                stack.add(pop.right);
+                continue;
+            }
+            stack.pop();
+        }
+        visitedNodes.forEach(visitedNode -> visitedNode.setVisited(false));
         return stringBuilder.toString();
     }
 
@@ -194,24 +213,7 @@ public class Tree {
     public Node dfs(double findData) {
         Stack<Node> stack = new Stack<>();
         stack.push(start);
-        while (stack.size() != 0) {
-            Node pop = stack.pop();
-            if (findData == pop.data) {
-                return pop;
-            }
-            if (pop.right != null) {
-                stack.add(pop.right);
-            }
-            if (pop.left != null) {
-                stack.add(pop.left);
-            }
-        }
-        return null;
-    }
-
-    public void dfsApply(Consumer<Node> nodeConsumer) {
-        Stack<Node> stack = new Stack<>();
-        stack.add(start);
+        var visitedNodes = new LinkedList<Node>();
         while (stack.size() != 0) {
             Node pop = stack.peek();
             if (pop.left != null && !pop.left.visited) {
@@ -219,8 +221,13 @@ public class Tree {
                 continue;
             }
             if (!pop.visited) {
-                nodeConsumer.accept(pop);
                 pop.visited = true;
+                visitedNodes.add(pop);
+            }
+            if (pop.data == findData) {
+                stack.clear();
+                visitedNodes.forEach(visitedNode -> visitedNode.setVisited(false));
+                return pop;
             }
             if (pop.right != null && !pop.right.visited) {
                 stack.add(pop.right);
@@ -228,6 +235,8 @@ public class Tree {
             }
             stack.pop();
         }
+        visitedNodes.forEach(visitedNode -> visitedNode.setVisited(false));
+        return null;
     }
 
     public static class Node {
@@ -249,18 +258,12 @@ public class Tree {
                     '}';
         }
 
-        public double getData() {
-            return data;
+        public void setVisited(boolean visited) {
+            this.visited = visited;
         }
 
-        public void string(StringBuilder stringBuilder) {
-            if (left != null) {
-                left.string(stringBuilder);
-            }
-            stringBuilder.append(data).append(",");
-            if (right != null) {
-                right.string(stringBuilder);
-            }
+        public double getData() {
+            return data;
         }
     }
 }
