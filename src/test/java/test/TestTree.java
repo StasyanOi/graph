@@ -1,7 +1,7 @@
 package test;
 
 import org.junit.jupiter.api.Test;
-import tree.Tree;
+import com.tree.Tree;
 
 import static org.junit.jupiter.api.Assertions.*;
 

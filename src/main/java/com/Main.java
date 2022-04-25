@@ -1,4 +1,6 @@
-package tree;
+package com;
+
+import com.graph.Graph;
 
 public class Main {
 

@@ -1,4 +1,4 @@
-package tree;
+package com.tree;
 
 import java.util.LinkedList;
 import java.util.Queue;
