@@ -1,23 +1,23 @@
-package test;
+package com.test;
 
-import org.junit.jupiter.api.Test;
 import com.tree.Tree;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestTree {
 
     @Test
-    public void insert() {
-        Tree tree = getTree();
+    public void insertTest() {
+        Tree tree = getTestTree();
         assertFalse(tree.has(100d));
         tree.insert(100d);
         assertTrue(tree.has(100d));
     }
 
     @Test
-    public void bfs() {
-        Tree tree = getTree();
+    public void bfsTest() {
+        Tree tree = getTestTree();
         double findData = 4;
         Tree.Node node = tree.bfs(findData);
         assertTrue(tree.contains(node));
@@ -25,8 +25,8 @@ public class TestTree {
     }
 
     @Test
-    public void dfsStack() {
-        Tree tree = getTree();
+    public void dfsStackTest() {
+        Tree tree = getTestTree();
         double findData = 4;
         Tree.Node node = tree.dfsStack(findData);
         assertTrue(tree.contains(node));
@@ -34,8 +34,8 @@ public class TestTree {
     }
 
     @Test
-    public void has() {
-        Tree tree = getTree();
+    public void hasTest() {
+        Tree tree = getTestTree();
         assertTrue(tree.has(-2d));
         assertFalse(tree.has(-200d));
         assertFalse(tree.has(-324d));
@@ -43,14 +43,14 @@ public class TestTree {
     }
 
     @Test
-    public void nodeConsume() {
-        Tree tree = getTree();
+    public void nodeConsumeTest() {
+        Tree tree = getTestTree();
         tree.dfsApply(System.out::println);
     }
 
     @Test
-    public void delete() {
-        Tree tree = getTree();
+    public void deleteTest() {
+        Tree tree = getTestTree();
         assertTrue(tree.has(-4));
         String beforeDelete = tree.toString();
         tree.delete(-4);
@@ -60,7 +60,7 @@ public class TestTree {
     }
 
     @Test
-    public void rotateRight() {
+    public void rotateRightTest() {
         Tree tree = new Tree();
         tree.insert(0);
         tree.insert(-2);
@@ -73,7 +73,7 @@ public class TestTree {
     }
 
     @Test
-    public void rotateLeft() {
+    public void rotateLeftTest() {
         Tree tree = new Tree();
         tree.insert(0);
         tree.insert(2);
@@ -86,21 +86,21 @@ public class TestTree {
     }
 
     @Test
-    public void dfs() {
-        Tree tree = getTree();
+    public void dfsTest() {
+        Tree tree = getTestTree();
         String stringRepresentation = tree.toString();
         String expectedString = "[-8.0,-6.0,-5.0,-4.0,-3.5,-3.4,-3.0,-2.0,-1.0,0.0,1.0,2.0,3.0,4.0,5.0,6.0,8.0,]";
         assertEquals(expectedString,stringRepresentation);
     }
 
     @Test
-    public void find() {
-        Tree tree = getTree();
+    public void findTest() {
+        Tree tree = getTestTree();
         tree.find(2);
     }
 
-    public Tree getTree() {
-        Tree tree = new Tree();
+    private Tree getTestTree() {
+        var tree = new Tree();
         tree.insert(0);
         tree.insert(-2);
         tree.insert(-4);

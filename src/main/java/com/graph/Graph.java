@@ -1,44 +1,50 @@
 package com.graph;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 public class Graph {
 
     private final List<Node> nodes;
 
     public Graph(boolean[][] graphMatrix) {
-        nodes = new ArrayList<>(graphMatrix.length);
-        for (int i = 0; i < graphMatrix.length; i++) {
-            nodes.add(new Node(new ArrayList<>(), i));
-        }
+        nodes = createNodes(graphMatrix.length);
+        connectNodes(graphMatrix);
+    }
+
+    private void connectNodes(boolean[][] graphMatrix) {
         for (int i = 0; i < nodes.size(); i++) {
-            for (int i1 = 0; i1 < graphMatrix.length; i1++) {
-                if (graphMatrix[i][i1]) {
-                    nodes.get(i).nexts.add(nodes.get(i1));
+            for (int j = 0; j < nodes.size(); j++) {
+                if (graphMatrix[i][j]) {
+                    nodes.get(i).nextNodes.add(nodes.get(j));
                 }
             }
         }
     }
 
+    private List<Node> createNodes(int amountOfNodes) {
+        var nodes = new ArrayList<Node>(amountOfNodes);
+        for (int i = 0; i < amountOfNodes; i++) {
+            nodes.add(new Node(new ArrayList<>(), i));
+        }
+        return nodes;
+    }
+
     public boolean bfs(int searchData) {
-        Node startNode = nodes.get(0);
+        var startNode = nodes.get(0);
         Queue<Node> nodeQueue = new LinkedList<>();
         nodeQueue.add(startNode);
 
         while (nodeQueue.size() != 0) {
-            Node currentNode = nodeQueue.poll();
+            var currentNode = nodeQueue.poll();
             if (searchData == currentNode.data) {
                 nodeQueue.clear();
                 setAllNotVisited();
                 return true;
             }
-            for (int i = 0; i < currentNode.nexts.size(); i++) {
-                Node e = currentNode.nexts.get(i);
-                if (!e.visited) {
-                    nodeQueue.add(e);
+            for (int i = 0; i < currentNode.nextNodes.size(); i++) {
+                var nextNode = currentNode.nextNodes.get(i);
+                if (!nextNode.visited) {
+                    nodeQueue.add(nextNode);
                 }
             }
         }
@@ -46,18 +52,40 @@ public class Graph {
         return false;
     }
 
-    public boolean dfsRecursive(int searchData) {
-        Node currentNode = nodes.get(0);
-        boolean found = currentNode.find(searchData);
-        setAllNotVisited();
-        return found;
+    public boolean dfs(int searchData) {
+        var stack = new Stack<Node>();
+        stack.push(nodes.get(0));
+
+        while (!stack.empty()) {
+            var currentNode = stack.peek();
+            currentNode.visited = true;
+            if (currentNode.data == searchData) {
+                stack.clear();
+                setAllNotVisited();
+                return true;
+            }
+            var nextNodes = currentNode.nextNodes;
+            if (nextNodes.size() == 0 || allNodesVisited(nextNodes)) {
+                stack.pop();
+            } else {
+                for (var nextNode : nextNodes) {
+                    if (!nextNode.visited) {
+                        stack.add(nextNode);
+                        break;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
-    public boolean bfsLoop(int searchData) {
-        Node currentNode = nodes.get(0);
-        boolean found = currentNode.find(searchData);
-        setAllNotVisited();
-        return found;
+    private boolean allNodesVisited(List<Node> nextNodes) {
+        for (var nextNode : nextNodes) {
+            if (!nextNode.visited) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private void setAllNotVisited() {
@@ -67,36 +95,11 @@ public class Graph {
     private static class Node {
         private final int data;
         private boolean visited;
-        private final List<Node> nexts;
+        private final List<Node> nextNodes;
 
-        private Node(List<Node> nexts, int data) {
-            this.nexts = nexts;
+        private Node(List<Node> nextNodes, int data) {
+            this.nextNodes = nextNodes;
             this.data = data;
-        }
-
-        public boolean find(int searchData) {
-            if (searchData == data) {
-                visited = true;
-                return true;
-            } else {
-                visited = true;
-                boolean[] finds = new boolean[nexts.size()];
-                for (int i = 0; i < nexts.size(); i++) {
-                    Node node = nexts.get(i);
-                    if (!node.visited) {
-                        finds[i] = node.find(searchData);
-                    }
-                }
-                return or(finds);
-            }
-        }
-
-        private boolean or(boolean[] finds) {
-            boolean finalFind = false;
-            for (int i = 0; i < finds.length; i++) {
-                finalFind |= finds[i];
-            }
-            return finalFind;
         }
     }
 }
