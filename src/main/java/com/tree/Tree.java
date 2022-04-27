@@ -99,7 +99,7 @@ public class Tree {
     }
 
     private void rewireTree(Node nodeToDelete, Node replacementNode) {
-        double temp = replacementNode.data;
+        double replacementValue = replacementNode.data;
         var parentNode = replacementNode.prev;
         if (parentNode.right == replacementNode) {
             parentNode.right = replacementNode.right;
@@ -107,7 +107,7 @@ public class Tree {
         if (parentNode.left == replacementNode) {
             parentNode.left = replacementNode.right;
         }
-        nodeToDelete.data = temp;
+        nodeToDelete.data = replacementValue;
     }
 
     private Node rightMostNode(Node leftTree) {
