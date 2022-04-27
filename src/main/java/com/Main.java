@@ -11,7 +11,6 @@ public class Main {
         matrix[0][2] = true;
         matrix[1][3] = true;
         matrix[1][4] = true;
-        printGraphMatrix(matrix);
         var valueMatrix = new int[numberOfNodes];
         valueMatrix[0] = 0;
         valueMatrix[1] = 1;
@@ -33,18 +32,5 @@ public class Main {
         System.out.println(graph.bfs(3));
         System.out.println(graph.bfs(4));
         System.out.println(graph.bfs(5));
-    }
-
-    private static void printGraphMatrix(boolean[][] graphMatrix) {
-        for (int i = 0; i < graphMatrix.length; i++) {
-            for (int j = 0; j < graphMatrix.length; j++) {
-                if (graphMatrix[i][j]) {
-                    System.out.print(1);
-                } else {
-                    System.out.print(0);
-                }
-            }
-            System.out.print("\n");
-        }
     }
 }
