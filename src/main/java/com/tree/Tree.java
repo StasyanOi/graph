@@ -6,11 +6,14 @@ import java.util.Stack;
 
 public class Tree {
 
+    private long size = 0;
+
     private Node start;
 
     public void insert(double data) {
         if (start == null) {
             start = new Node(data);
+            size++;
         } else {
             boolean inserted = false;
             Node currentNode = start;
@@ -20,6 +23,7 @@ public class Tree {
                         currentNode.left = new Node(data);
                         currentNode.left.prev = currentNode;
                         inserted = true;
+                        size++;
                     } else {
                         currentNode = currentNode.left;
                     }
@@ -28,6 +32,7 @@ public class Tree {
                         currentNode.right = new Node(data);
                         currentNode.right.prev = currentNode;
                         inserted = true;
+                        size++;
                     } else {
                         currentNode = currentNode.right;
                     }
@@ -153,22 +158,20 @@ public class Tree {
         var visitedNodes = new LinkedList<Node>();
         while (stack.size() != 0) {
             Node pop = stack.peek();
-            if (pop.left != null && !pop.left.visited) {
+            if (pop.left != null && !visitedNodes.contains(pop.left)) {
                 stack.add(pop.left);
                 continue;
             }
-            if (!pop.visited) {
-                pop.visited = true;
+            if (!visitedNodes.contains(pop)) {
                 visitedNodes.add(pop);
                 stringBuilder.append(pop.data).append(",");
             }
-            if (pop.right != null && !pop.right.visited) {
+            if (pop.right != null && !visitedNodes.contains(pop.right)) {
                 stack.add(pop.right);
                 continue;
             }
             stack.pop();
         }
-        visitedNodes.forEach(visitedNode -> visitedNode.setVisited(false));
         return stringBuilder.toString();
     }
 
@@ -216,26 +219,23 @@ public class Tree {
         var visitedNodes = new LinkedList<Node>();
         while (stack.size() != 0) {
             Node pop = stack.peek();
-            if (pop.left != null && !pop.left.visited) {
+            if (pop.left != null && !visitedNodes.contains(pop.left)) {
                 stack.add(pop.left);
                 continue;
             }
-            if (!pop.visited) {
-                pop.visited = true;
+            if (!visitedNodes.contains(pop)) {
                 visitedNodes.add(pop);
             }
             if (pop.data == findData) {
                 stack.clear();
-                visitedNodes.forEach(visitedNode -> visitedNode.setVisited(false));
                 return pop;
             }
-            if (pop.right != null && !pop.right.visited) {
+            if (pop.right != null && !visitedNodes.contains(pop.right)) {
                 stack.add(pop.right);
                 continue;
             }
             stack.pop();
         }
-        visitedNodes.forEach(visitedNode -> visitedNode.setVisited(false));
         return null;
     }
 
@@ -245,7 +245,6 @@ public class Tree {
         private Node left;
         private Node right;
         private double data;
-        private boolean visited;
 
         public Node(double data) {
             this.data = data;
@@ -256,10 +255,6 @@ public class Tree {
             return "Node{" +
                     "data=" + data +
                     '}';
-        }
-
-        public void setVisited(boolean visited) {
-            this.visited = visited;
         }
 
         public double getData() {

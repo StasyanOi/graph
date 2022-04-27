@@ -12,7 +12,13 @@ public class Main {
         matrix[1][3] = true;
         matrix[1][4] = true;
         printGraphMatrix(matrix);
-        Graph graph = new Graph(matrix);
+        var valueMatrix = new int[numberOfNodes];
+        valueMatrix[0] = 0;
+        valueMatrix[1] = 1;
+        valueMatrix[2] = 2;
+        valueMatrix[3] = 3;
+        valueMatrix[4] = 4;
+        Graph graph = new Graph(matrix, valueMatrix);
         System.out.println("DFS");
         System.out.println(graph.dfs(0));
         System.out.println(graph.dfs(1));
