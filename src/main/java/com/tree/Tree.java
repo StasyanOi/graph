@@ -80,30 +80,15 @@ public class Tree {
     }
 
     public void delete(double data) {
-        Node nodeToDelete = dfs(data);
+        var nodeToDelete = dfs(data);
         if (nodeToDelete.right != null) {
-            Node leftMostNode = leftMostNode(nodeToDelete.right);
-            double temp = leftMostNode.data;
-            if (leftMostNode.prev.right == leftMostNode) {
-                leftMostNode.prev.right = leftMostNode.right;
-            }
-            if (leftMostNode.prev.left == leftMostNode) {
-                leftMostNode.prev.left = leftMostNode.right;
-            }
-            nodeToDelete.data = temp;
+            var leftMostNode = leftMostNode(nodeToDelete.right);
+            rewireTree(nodeToDelete, leftMostNode);
         } else if (nodeToDelete.left != null) {
-            Node rightMostNode = rightMostNode(nodeToDelete.left);
-            double temp = rightMostNode.data;
-            if (rightMostNode.prev.right == rightMostNode) {
-                rightMostNode.prev.right = rightMostNode.right;
-            }
-            if (rightMostNode.prev.left == rightMostNode) {
-                rightMostNode.prev.left = rightMostNode.right;
-            }
-            delete(temp);
-            nodeToDelete.data = temp;
+            var rightMostNode = rightMostNode(nodeToDelete.left);
+            rewireTree(nodeToDelete, rightMostNode);
         } else {
-            Node parentDeleteNode = nodeToDelete.prev;
+            var parentDeleteNode = nodeToDelete.prev;
             if (parentDeleteNode.left == nodeToDelete) {
                 parentDeleteNode.left = null;
             }
@@ -111,6 +96,18 @@ public class Tree {
                 parentDeleteNode.right = null;
             }
         }
+    }
+
+    private void rewireTree(Node nodeToDelete, Node replacementNode) {
+        double replacementValue = replacementNode.data;
+        var parentNode = replacementNode.prev;
+        if (parentNode.right == replacementNode) {
+            parentNode.right = replacementNode.right;
+        }
+        if (parentNode.left == replacementNode) {
+            parentNode.left = replacementNode.right;
+        }
+        nodeToDelete.data = replacementValue;
     }
 
     private Node rightMostNode(Node leftTree) {
@@ -153,22 +150,20 @@ public class Tree {
         var visitedNodes = new LinkedList<Node>();
         while (stack.size() != 0) {
             Node pop = stack.peek();
-            if (pop.left != null && !pop.left.visited) {
+            if (pop.left != null && !visitedNodes.contains(pop.left)) {
                 stack.add(pop.left);
                 continue;
             }
-            if (!pop.visited) {
-                pop.visited = true;
+            if (!visitedNodes.contains(pop)) {
                 visitedNodes.add(pop);
                 stringBuilder.append(pop.data).append(",");
             }
-            if (pop.right != null && !pop.right.visited) {
+            if (pop.right != null && !visitedNodes.contains(pop.right)) {
                 stack.add(pop.right);
                 continue;
             }
             stack.pop();
         }
-        visitedNodes.forEach(visitedNode -> visitedNode.setVisited(false));
         return stringBuilder.toString();
     }
 
@@ -216,26 +211,23 @@ public class Tree {
         var visitedNodes = new LinkedList<Node>();
         while (stack.size() != 0) {
             Node pop = stack.peek();
-            if (pop.left != null && !pop.left.visited) {
+            if (pop.left != null && !visitedNodes.contains(pop.left)) {
                 stack.add(pop.left);
                 continue;
             }
-            if (!pop.visited) {
-                pop.visited = true;
+            if (!visitedNodes.contains(pop)) {
                 visitedNodes.add(pop);
             }
             if (pop.data == findData) {
                 stack.clear();
-                visitedNodes.forEach(visitedNode -> visitedNode.setVisited(false));
                 return pop;
             }
-            if (pop.right != null && !pop.right.visited) {
+            if (pop.right != null && !visitedNodes.contains(pop.right)) {
                 stack.add(pop.right);
                 continue;
             }
             stack.pop();
         }
-        visitedNodes.forEach(visitedNode -> visitedNode.setVisited(false));
         return null;
     }
 
@@ -245,7 +237,6 @@ public class Tree {
         private Node left;
         private Node right;
         private double data;
-        private boolean visited;
 
         public Node(double data) {
             this.data = data;
@@ -256,10 +247,6 @@ public class Tree {
             return "Node{" +
                     "data=" + data +
                     '}';
-        }
-
-        public void setVisited(boolean visited) {
-            this.visited = visited;
         }
 
         public double getData() {

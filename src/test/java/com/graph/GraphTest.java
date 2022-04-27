@@ -2,33 +2,32 @@ package com.graph;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class GraphTest {
 
     @Test
     void bfsSuccessTest() {
         var graph = getTestGraph();
-        assertTrue(graph.bfs(2));
+        assertNotNull(graph.bfs(2));
     }
 
     @Test
     void bfsFailTest() {
         var graph = getTestGraph();
-        assertFalse(graph.bfs(100));
+        assertNull(graph.bfs(100));
     }
 
     @Test
     void dfsSuccessTest() {
         var graph = getTestGraph();
-        assertTrue(graph.dfs(2));
+        assertNotNull(graph.dfs(2));
     }
 
     @Test
     void dfsFailTest() {
         var graph = getTestGraph();
-        assertFalse(graph.dfs(100));
+        assertNull(graph.dfs(100));
     }
 
 
@@ -39,6 +38,12 @@ class GraphTest {
         connectionMatrix[1][2] = true;
         connectionMatrix[1][3] = true;
         connectionMatrix[1][4] = true;
-        return new Graph(connectionMatrix);
+        var valueMatrix = new int[numberOfNodes];
+        valueMatrix[0] = 0;
+        valueMatrix[1] = 1;
+        valueMatrix[2] = 2;
+        valueMatrix[3] = 3;
+        valueMatrix[4] = 4;
+        return new Graph(connectionMatrix, valueMatrix);
     }
 }
