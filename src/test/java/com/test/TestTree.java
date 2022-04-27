@@ -34,7 +34,7 @@ public class TestTree {
     }
 
     @Test
-    public void deleteTest() {
+    public void deleteNegative4Test() {
         var tree = getTestTree();
 
         assertNotNull(tree.dfs(-4));
@@ -46,6 +46,21 @@ public class TestTree {
         var afterDeleteString = tree.toString();
 
         assertEquals(beforeDeleteString.replace("-4.0,", ""), afterDeleteString);
+    }
+
+    @Test
+    public void delete5Test() {
+        var tree = getTestTree();
+
+        assertNotNull(tree.dfs(5));
+        var beforeDeleteString = tree.toString();
+
+        tree.delete(5);
+
+        assertNull(tree.dfs(5));
+        var afterDeleteString = tree.toString();
+
+        assertEquals(beforeDeleteString.replace("4.0,5.0,", "4.0,"), afterDeleteString);
     }
 
     @Test

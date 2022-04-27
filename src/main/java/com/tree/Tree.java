@@ -6,14 +6,11 @@ import java.util.Stack;
 
 public class Tree {
 
-    private long size = 0;
-
     private Node start;
 
     public void insert(double data) {
         if (start == null) {
             start = new Node(data);
-            size++;
         } else {
             boolean inserted = false;
             Node currentNode = start;
@@ -23,7 +20,6 @@ public class Tree {
                         currentNode.left = new Node(data);
                         currentNode.left.prev = currentNode;
                         inserted = true;
-                        size++;
                     } else {
                         currentNode = currentNode.left;
                     }
@@ -32,7 +28,6 @@ public class Tree {
                         currentNode.right = new Node(data);
                         currentNode.right.prev = currentNode;
                         inserted = true;
-                        size++;
                     } else {
                         currentNode = currentNode.right;
                     }
@@ -85,30 +80,15 @@ public class Tree {
     }
 
     public void delete(double data) {
-        Node nodeToDelete = dfs(data);
+        var nodeToDelete = dfs(data);
         if (nodeToDelete.right != null) {
-            Node leftMostNode = leftMostNode(nodeToDelete.right);
-            double temp = leftMostNode.data;
-            if (leftMostNode.prev.right == leftMostNode) {
-                leftMostNode.prev.right = leftMostNode.right;
-            }
-            if (leftMostNode.prev.left == leftMostNode) {
-                leftMostNode.prev.left = leftMostNode.right;
-            }
-            nodeToDelete.data = temp;
+            var leftMostNode = leftMostNode(nodeToDelete.right);
+            rewireTree(nodeToDelete, leftMostNode);
         } else if (nodeToDelete.left != null) {
-            Node rightMostNode = rightMostNode(nodeToDelete.left);
-            double temp = rightMostNode.data;
-            if (rightMostNode.prev.right == rightMostNode) {
-                rightMostNode.prev.right = rightMostNode.right;
-            }
-            if (rightMostNode.prev.left == rightMostNode) {
-                rightMostNode.prev.left = rightMostNode.right;
-            }
-            delete(temp);
-            nodeToDelete.data = temp;
+            var rightMostNode = rightMostNode(nodeToDelete.left);
+            rewireTree(nodeToDelete, rightMostNode);
         } else {
-            Node parentDeleteNode = nodeToDelete.prev;
+            var parentDeleteNode = nodeToDelete.prev;
             if (parentDeleteNode.left == nodeToDelete) {
                 parentDeleteNode.left = null;
             }
@@ -116,6 +96,18 @@ public class Tree {
                 parentDeleteNode.right = null;
             }
         }
+    }
+
+    private void rewireTree(Node nodeToDelete, Node replacementNode) {
+        double temp = replacementNode.data;
+        var parentNode = replacementNode.prev;
+        if (parentNode.right == replacementNode) {
+            parentNode.right = replacementNode.right;
+        }
+        if (parentNode.left == replacementNode) {
+            parentNode.left = replacementNode.right;
+        }
+        nodeToDelete.data = temp;
     }
 
     private Node rightMostNode(Node leftTree) {
