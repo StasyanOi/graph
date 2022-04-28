@@ -111,7 +111,7 @@ public class TestTree {
     public void rotateLeftTest() {
         var tree = getTestTree();
         var beforeRotationString = tree.toString();
-        tree.rotateLeft(tree.dfs(6));
+        tree.rotateLeft(tree.dfs(-3.5));
         var afterRotationString = tree.toString();
         assertEquals(beforeRotationString, afterRotationString);
     }

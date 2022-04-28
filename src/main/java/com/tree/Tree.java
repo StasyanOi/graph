@@ -175,7 +175,6 @@ public class Tree {
     }
 
     public void rotateRight(Node root) {
-        // check if null
         var pivot = root.left;
         root.left = pivot.right;
         pivot.right = root;
