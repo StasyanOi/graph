@@ -151,7 +151,7 @@ public class Tree {
         while (stack.size() != 0) {
             Node pop = stack.peek();
             if (pop.left != null && !visitedNodes.contains(pop.left)) {
-                stack.add(pop.left);
+                stack.push(pop.left);
                 continue;
             }
             if (!visitedNodes.contains(pop)) {
@@ -159,7 +159,7 @@ public class Tree {
                 stringBuilder.append(pop.data).append(",");
             }
             if (pop.right != null && !visitedNodes.contains(pop.right)) {
-                stack.add(pop.right);
+                stack.push(pop.right);
                 continue;
             }
             stack.pop();
@@ -167,26 +167,32 @@ public class Tree {
         return stringBuilder.toString();
     }
 
-    public void rotateLeft(Node pivot) {
-        var root = pivot.prev;
+    public void rotateLeft(Node root) {
+        var pivot = root.right;
         root.right = pivot.left;
         pivot.left = root;
-        if (start == root) {
-            start = pivot;
-        }
-        pivot.prev = root.prev;
-        root.prev = pivot;
+        rewireNodes(root, pivot);
     }
 
-    public void rotateRight(Node pivot) {
-        var root = pivot.prev;
+    public void rotateRight(Node root) {
+        // check if null
+        var pivot = root.left;
         root.left = pivot.right;
         pivot.right = root;
+        rewireNodes(root, pivot);
+    }
+
+    private void rewireNodes(Node root, Node pivot) {
         if (start == root) {
             start = pivot;
         }
         pivot.prev = root.prev;
         root.prev = pivot;
+        if (pivot.prev.left == root) {
+            pivot.prev.left = pivot;
+        } else {
+            pivot.prev.right = pivot;
+        }
     }
 
     public Node bfs(double findData) {
