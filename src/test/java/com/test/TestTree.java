@@ -64,12 +64,41 @@ public class TestTree {
     }
 
     @Test
+    public void deleteMultipleValuesTest() {
+        var tree = getTestTree();
+
+        assertNotNull(tree.dfs(5));
+        assertNotNull(tree.dfs(-3.5));
+        assertNotNull(tree.dfs(-8));
+        assertNotNull(tree.dfs(0));
+        assertNotNull(tree.dfs(8));
+        var beforeDeleteString = tree.toString();
+
+        tree.delete(5);
+        tree.delete(-3.5);
+        tree.delete(-8);
+        tree.delete(0);
+        tree.delete(8);
+
+        assertNull(tree.dfs(5));
+        assertNull(tree.dfs(-3.5));
+        assertNull(tree.dfs(-8));
+        assertNull(tree.dfs(0));
+        assertNull(tree.dfs(8));
+        var afterDeleteString = tree.toString();
+
+        assertEquals(
+                beforeDeleteString
+                        .replace("4.0,5.0,", "4.0,")
+                        .replace("-3.5,", "")
+                        .replace("-8.0,", "")
+                        .replace("0.0,", "")
+                        .replace("8.0,", ""), afterDeleteString);
+    }
+
+    @Test
     public void rotateRightTest() {
-        var tree = new Tree();
-        tree.insert(0);
-        tree.insert(-2);
-        tree.insert(-1);
-        tree.insert(-4);
+        var tree = getTestTree();
 
         var beforeRotationString = tree.toString();
         tree.rotateRight(tree.dfs(-2));
@@ -80,13 +109,9 @@ public class TestTree {
 
     @Test
     public void rotateLeftTest() {
-        var tree = new Tree();
-        tree.insert(0);
-        tree.insert(2);
-        tree.insert(1);
-        tree.insert(4);
+        var tree = getTestTree();
         var beforeRotationString = tree.toString();
-        tree.rotateLeft(tree.dfs(2));
+        tree.rotateLeft(tree.dfs(-3.5));
         var afterRotationString = tree.toString();
         assertEquals(beforeRotationString, afterRotationString);
     }
