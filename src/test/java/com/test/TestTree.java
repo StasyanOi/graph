@@ -98,11 +98,7 @@ public class TestTree {
 
     @Test
     public void rotateRightTest() {
-        var tree = new Tree();
-        tree.insert(0);
-        tree.insert(-2);
-        tree.insert(-1);
-        tree.insert(-4);
+        var tree = getTestTree();
 
         var beforeRotationString = tree.toString();
         tree.rotateRight(tree.dfs(-2));
@@ -113,13 +109,9 @@ public class TestTree {
 
     @Test
     public void rotateLeftTest() {
-        var tree = new Tree();
-        tree.insert(0);
-        tree.insert(2);
-        tree.insert(1);
-        tree.insert(4);
+        var tree = getTestTree();
         var beforeRotationString = tree.toString();
-        tree.rotateLeft(tree.dfs(2));
+        tree.rotateLeft(tree.dfs(-4));
         var afterRotationString = tree.toString();
         assertEquals(beforeRotationString, afterRotationString);
     }

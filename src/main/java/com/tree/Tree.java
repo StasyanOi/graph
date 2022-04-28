@@ -167,24 +167,26 @@ public class Tree {
         return stringBuilder.toString();
     }
 
-    public void rotateLeft(Node midNode) {
-        Node prev = midNode.prev;
-        prev.right = midNode.left;
-        midNode.left = prev;
-        if (start == prev) {
-            start = midNode;
+    public void rotateLeft(Node pivot) {
+        var root = pivot.prev;
+        root.right = pivot.left;
+        pivot.left = root;
+        if (start == root) {
+            start = pivot;
         }
-        midNode.prev = prev.prev;
+        pivot.prev = root.prev;
+        root.prev = pivot;
     }
 
-    public void rotateRight(Node midNode) {
-        Node prev = midNode.prev;
-        prev.left = midNode.right;
-        midNode.right = prev;
-        if (start == prev) {
-            start = midNode;
+    public void rotateRight(Node pivot) {
+        var root = pivot.prev;
+        root.left = pivot.right;
+        pivot.right = root;
+        if (start == root) {
+            start = pivot;
         }
-        midNode.prev = prev.prev;
+        pivot.prev = root.prev;
+        root.prev = pivot;
     }
 
     public Node bfs(double findData) {
