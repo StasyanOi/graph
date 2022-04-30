@@ -194,6 +194,9 @@ public class Tree {
     public void rotateLeft(Node root) {
         var pivot = root.right;
         root.right = pivot.left;
+        if (root.right != null) {
+            root.right.prev = root;
+        }
         pivot.left = root;
         rewireNodes(root, pivot);
     }
@@ -201,6 +204,9 @@ public class Tree {
     public void rotateRight(Node root) {
         var pivot = root.left;
         root.left = pivot.right;
+        if (root.left != null) {
+            root.left.prev = root;
+        }
         pivot.right = root;
         rewireNodes(root, pivot);
     }
@@ -214,7 +220,7 @@ public class Tree {
         if (pivot.prev != null) {
             if (pivot.prev.left == root) {
                 pivot.prev.left = pivot;
-            } else {
+            } else if (pivot.prev.right == root) {
                 pivot.prev.right = pivot;
             }
         }
