@@ -50,8 +50,8 @@ public class TestTree {
 
     @Test
     public void balancingTest() {
-        var unbalancedTree = getUnbalancedTree();
-        assertEquals(3, unbalancedTree.calculateHeight());
+        var balancedTree = getBalancedTree();
+        assertEquals(3, balancedTree.calculateHeight());
     }
 
     @Test
@@ -152,7 +152,7 @@ public class TestTree {
         return tree;
     }
 
-    private Tree getUnbalancedTree() {
+    private Tree getBalancedTree() {
         var tree = new Tree();
         tree.insert(0);
         tree.insert(1);
