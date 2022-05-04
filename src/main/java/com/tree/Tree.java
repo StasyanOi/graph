@@ -20,6 +20,7 @@ public class Tree {
                         currentNode.left = new Node(data);
                         currentNode.left.prev = currentNode;
                         inserted = true;
+                        unwind(currentNode);
                     } else {
                         currentNode = currentNode.left;
                     }
@@ -28,6 +29,7 @@ public class Tree {
                         currentNode.right = new Node(data);
                         currentNode.right.prev = currentNode;
                         inserted = true;
+                        unwind(currentNode);
                     } else {
                         currentNode = currentNode.right;
                     }
@@ -38,45 +40,67 @@ public class Tree {
         }
     }
 
-    private void rotateTree(Node node) {
-        if (heightDiff(node) == 2) {
-            rotateRight(node.left);
-        } else if (heightDiff(node) == -2) {
-            rotateLeft(node.right);
+    private void unwind(Node node) {
+        var currentNode = node;
+        while (currentNode != null) {
+            if (rotateTree(currentNode)) {
+                currentNode = currentNode.prev;
+            }
+            currentNode = currentNode.prev;
         }
+    }
 
-        if (node.left != null) {
-            rotateTree(node.left);
+    private boolean rotateTree(Node node) {
+        if (heightDiff(node) == 1) {
+            rotateRight(node);
+            return true;
+        } else if (heightDiff(node) == -1) {
+            rotateLeft(node);
+            return true;
         }
-        if (node.right != null) {
-            rotateTree(node.right);
-        }
+        return false;
     }
 
     private int heightDiff(Node node) {
         Node leftNode = node.left;
         Node rightNode = node.right;
-        int leftLevel = 0;
-        int rightLevel = 0;
-
-        if (leftNode != null) {
-            leftLevel = leftNode.level;
-        }
-
-        if (rightNode != null) {
-            rightLevel = rightNode.level;
-        }
-        return leftLevel - rightLevel;
+        return calculateHeight(leftNode) - calculateHeight(rightNode);
     }
 
-    private void unwind(Node node) {
-        int level = 1;
-        Node currentNode = node;
-        while (currentNode != null) {
-            currentNode.level = level;
-            level++;
-            currentNode = currentNode.prev;
+    public int calculateHeight() {
+        return calculateHeight(start);
+    }
+
+    private int calculateHeight(Node treeRoot) {
+        int height = 0;
+        if (treeRoot == null) {
+            return height;
         }
+        Stack<Node> stack = new Stack<>();
+        stack.push(treeRoot);
+        var visitedNodes = new LinkedList<Node>();
+        while (stack.size() != 0) {
+            Node peek = stack.peek();
+            if (peek.left != null && !visitedNodes.contains(peek.left)) {
+                stack.push(peek.left);
+                if (stack.size() - 1 > height) {
+                    height = stack.size() - 1;
+                }
+                continue;
+            }
+            if (!visitedNodes.contains(peek)) {
+                visitedNodes.add(peek);
+            }
+            if (peek.right != null && !visitedNodes.contains(peek.right)) {
+                stack.push(peek.right);
+                if (stack.size() - 1 > height) {
+                    height = stack.size() - 1;
+                }
+                continue;
+            }
+            stack.pop();
+        }
+        return height;
     }
 
     public void delete(double data) {
@@ -170,6 +194,9 @@ public class Tree {
     public void rotateLeft(Node root) {
         var pivot = root.right;
         root.right = pivot.left;
+        if (root.right != null) {
+            root.right.prev = root;
+        }
         pivot.left = root;
         rewireNodes(root, pivot);
     }
@@ -177,6 +204,9 @@ public class Tree {
     public void rotateRight(Node root) {
         var pivot = root.left;
         root.left = pivot.right;
+        if (root.left != null) {
+            root.left.prev = root;
+        }
         pivot.right = root;
         rewireNodes(root, pivot);
     }
@@ -187,10 +217,12 @@ public class Tree {
         }
         pivot.prev = root.prev;
         root.prev = pivot;
-        if (pivot.prev.left == root) {
-            pivot.prev.left = pivot;
-        } else {
-            pivot.prev.right = pivot;
+        if (pivot.prev != null) {
+            if (pivot.prev.left == root) {
+                pivot.prev.left = pivot;
+            } else if (pivot.prev.right == root) {
+                pivot.prev.right = pivot;
+            }
         }
     }
 
